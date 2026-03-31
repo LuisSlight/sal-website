@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAL — Sociological Analysis Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Instrument+Sans:wght@400;500;600;700&family=Inconsolata:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #0e1117;
+  --paper:    #f6f3ee;
+  --warm:     #ede8df;
+  --accent:   #bf4d28;
+  --blue:     #183356;
+  --blue-mid: #254d7a;
+  --muted:    #7a7265;
+  --rule:     #d5cfc5;
+  --card:     #ffffff;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'Instrument Sans', sans-serif;
+  --mono:     'Inconsolata', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  pointer-events: none; z-index: 9998; opacity: .028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 2.4rem;
+  background: rgba(246,243,238,.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--rule);
+  transition: padding .3s;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  color: var(--blue);
+  text-decoration: none;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: .7rem;
+}
+
+.brand-sub {
+  font-family: var(--mono);
+  font-size: .52rem;
+  opacity: 0.7;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nav-logo sup { color: var(--accent); font-size: .6em; vertical-align: super; }
+nav ul { display: flex; gap: 2rem; list-style: none; align-items: center; }
+nav a {
+  font-size: .73rem; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  position: relative; transition: color .2s;
+}
+nav a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1.5px; background: var(--accent); transition: width .25s;
+}
+nav a:hover { color: var(--accent); }
+nav a:hover::after { width: 100%; }
+.btn-nav-manifesto {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+  text-transform: uppercase; padding: .45rem 1.1rem;
+  background: var(--blue); color: #fff;
+  border: none; cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.btn-nav-manifesto:hover { background: var(--accent); transform: translateY(-1px); }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding-top: 72px;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 6rem 4rem 6rem 3.5rem;
+}
+.hero-eyebrow {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1.6rem;
+  display: flex; align-items: center; gap: .8rem;
+}
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--blue);
+  margin-bottom: 1.2rem;
+  font-weight: 900;
+  max-width: 520px;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.hero-desc {
+  font-size: 0.98rem;
+  color: var(--muted);
+  line-height: 1.72;
+  max-width: 380px;
+  margin-bottom: 2.4rem;
+}
+.hero-actions { display: flex; gap: .9rem; flex-wrap: wrap; align-items: center; }
+.btn-dark {
+  display: inline-block; font-family: var(--mono); font-size: .72rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: .85rem 1.8rem;
+  background: var(--blue); color: #fff; text-decoration: none;
+  transition: background .2s, transform .15s; border: none; cursor: pointer;
+}
+.btn-dark:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-ghost {
+  display: inline-block; font-family: var(--mono); font-size: .72rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: .85rem 1.8rem;
+  background: transparent; color: var(--ink);
+  border: 1.5px solid var(--ink); text-decoration: none;
+  transition: all .2s;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.btn-accent-outline {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .12em;
+  text-transform: uppercase; padding: .85rem 1.8rem;
+  background: transparent; color: var(--accent);
+  border: 1.5px solid var(--accent);
+  transition: all .2s; cursor: pointer;
+}
+.btn-accent-outline:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+
+.hero-right {
+  position: relative; background: var(--blue); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-right::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 65% 35%, rgba(191,77,40,.22) 0%, transparent 65%);
+}
+#net-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-stats {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: rgba(255,255,255,.08);
+}
+.stat-cell {
+  padding: 1.4rem 1.6rem;
+  background: rgba(24,51,86,.75);
+  backdrop-filter: blur(6px);
+}
+.stat-n { font-family: var(--serif); font-size: 2rem; color: #fff; line-height: 1; margin-bottom: .2rem; }
+.stat-l { font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+
+/* TICKER */
+.ticker-bar { overflow: hidden; background: var(--accent); padding: .55rem 0; white-space: nowrap; }
+.ticker-inner {
+  display: inline-block; animation: tick 30s linear infinite;
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: #fff;
+}
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* SECTION */
+section { padding: 7rem 3.5rem; }
+.sec-head { display: flex; align-items: flex-end; gap: 1.5rem; margin-bottom: 4rem; }
+.sec-num { font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; color: var(--accent); padding-bottom: .15rem; white-space: nowrap; }
+h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.8rem); color: var(--blue); line-height: 1.1; font-weight: 700; }
+.sec-rule { flex: 1; height: 1px; background: var(--rule); margin-bottom: .4rem; }
+
+/* ABOUT */
+#about { background: var(--ink); }
+#about h2 { color: var(--paper); }
+#about .sec-num { color: var(--accent); }
+#about .sec-rule { background: rgba(255,255,255,.12); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.about-body p { font-size: 1rem; color: rgba(246,243,238,.68); line-height: 1.85; margin-bottom: 1.4rem; }
+.about-body strong { color: var(--paper); font-weight: 600; }
+.principles { display: flex; flex-direction: column; gap: 1px; }
+.principle {
+  display: flex; gap: 1.4rem; align-items: flex-start;
+  padding: 1.4rem 1.5rem; background: rgba(255,255,255,.04);
+  border-left: 2px solid transparent; transition: border-color .2s, background .2s;
+}
+.principle:hover { border-left-color: var(--accent); background: rgba(255,255,255,.07); }
+.p-num { font-family: var(--mono); font-size: .65rem; color: var(--accent); min-width: 2.8rem; padding-top: .2rem; }
+.p-title { font-weight: 700; font-size: .88rem; color: var(--paper); margin-bottom: .25rem; }
+.p-desc { font-size: .82rem; color: rgba(246,243,238,.5); line-height: 1.6; }
+
+/* WORK */
+#work { background: var(--paper); }
+.work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.work-card {
+  background: var(--card); padding: 2.8rem;
+  position: relative; overflow: hidden; transition: transform .25s;
+}
+.work-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--rule); transition: background .25s;
+}
+.work-card:hover { transform: translateY(-3px); }
+.work-card:hover::before { background: var(--accent); }
+.wc-track { font-family: var(--mono); font-size: .62rem; letter-spacing: .16em; color: var(--muted); margin-bottom: 1.4rem; }
+.work-card h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--blue); margin-bottom: .9rem; line-height: 1.2; }
+.work-card p { font-size: .88rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.5rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag { font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; padding: .28rem .65rem; border: 1px solid var(--rule); color: var(--muted); }
+
+/* PROJECTS */
+#projects { background: var(--warm); }
+.proj-list { display: flex; flex-direction: column; gap: 2px; }
+.proj-row {
+  display: grid; grid-template-columns: 52px 1fr 1.4fr auto;
+  gap: 2rem; align-items: center; padding: 1.8rem 2.5rem;
+  background: var(--card); text-decoration: none; color: inherit;
+  border-left: 3px solid transparent; transition: background .2s, border-color .2s;
+}
+.proj-row:hover { background: var(--blue); border-left-color: var(--accent); }
+.proj-row:hover .proj-n, .proj-row:hover .proj-name { color: rgba(255,255,255,.9); }
+.proj-row:hover .proj-desc { color: rgba(255,255,255,.5); }
+.proj-row:hover .proj-cta { color: rgba(255,255,255,.65); }
+.proj-n { font-family: var(--mono); font-size: .68rem; color: var(--accent); transition: color .2s; }
+.proj-name { font-weight: 700; font-size: .97rem; transition: color .2s; }
+.proj-desc { font-size: .83rem; color: var(--muted); transition: color .2s; }
+.proj-cta { font-family: var(--mono); font-size: .68rem; color: var(--muted); text-align: right; transition: color .2s; }
+
+/* RESOURCES */
+#resources { background: var(--paper); }
+.res-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+.res-card { background: var(--card); padding: 2rem 2rem 2.4rem; }
+.res-icon { font-family: var(--mono); font-size: 1.3rem; color: var(--accent); margin-bottom: .9rem; display: block; }
+.res-title { font-weight: 700; font-size: .88rem; letter-spacing: .03em; margin-bottom: .45rem; }
+.res-desc { font-size: .8rem; color: var(--muted); line-height: 1.65; }
+
+/* JOIN */
+#join { background: var(--blue); }
+#join h2 { color: var(--paper); }
+#join .sec-num { color: rgba(191,77,40,.9); }
+#join .sec-rule { background: rgba(255,255,255,.14); }
+.join-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.join-intro { font-size: 1rem; color: rgba(246,243,238,.68); line-height: 1.8; margin-bottom: 2rem; }
+.roles { display: flex; flex-direction: column; gap: 1px; }
+.role { display: flex; gap: 1.4rem; align-items: flex-start; padding: 1.2rem 1.4rem; background: rgba(255,255,255,.05); transition: background .2s; }
+.role:hover { background: rgba(255,255,255,.09); }
+.role-tag { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); min-width: 5rem; padding-top: .15rem; }
+.role-text { font-size: .84rem; color: rgba(246,243,238,.6); line-height: 1.65; }
+.role-text strong { color: var(--paper); }
+.contact-box { background: rgba(255,255,255,.05); padding: 2.5rem; }
+.contact-box h3 { font-family: var(--serif); font-size: 1.4rem; color: var(--paper); margin-bottom: 1.5rem; }
+.field { margin-bottom: .9rem; }
+.field label { display: block; font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(246,243,238,.45); margin-bottom: .35rem; }
+.field input, .field textarea, .field select {
+  width: 100%; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14); color: var(--paper);
+  padding: .72rem .95rem; font-family: var(--sans); font-size: .88rem;
+  outline: none; transition: border-color .2s;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+.field textarea { min-height: 90px; resize: vertical; }
+.field select option { background: var(--blue); }
+.btn-send {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .88rem 0; background: var(--accent); color: #fff;
+  border: none; cursor: pointer; width: 100%; margin-top: .4rem;
+  transition: background .2s, transform .15s;
+}
+.btn-send:hover { background: #d4582f; transform: translateY(-2px); }
+
+/* FOOTER */
+footer {
+  background: var(--ink); padding: 2.8rem 3.5rem;
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 2rem; align-items: start;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.f-logo { font-family: var(--mono); font-size: .95rem; color: var(--paper); letter-spacing: .1em; }
+.f-logo sup { color: var(--accent); }
+.f-sub { font-size: .72rem; color: rgba(246,243,238,.35); margin-top: .3rem; }
+.f-links { display: flex; flex-direction: column; gap: .35rem; align-items: center; }
+.f-links a { font-family: var(--mono); font-size: .68rem; letter-spacing: .07em; color: rgba(246,243,238,.4); text-decoration: none; transition: color .2s; cursor: pointer; }
+.f-links a:hover { color: var(--accent); }
+.f-contact { text-align: right; }
+.f-contact p { font-family: var(--mono); font-size: .68rem; color: rgba(246,243,238,.4); line-height: 1.9; }
+.f-contact a { color: rgba(246,243,238,.6); text-decoration: none; transition: color .2s; }
+.f-contact a:hover { color: var(--accent); }
+.f-bottom {
+  background: var(--ink); padding: .9rem 3.5rem;
+  display: flex; justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,.04);
+}
+.f-bottom p { font-family: var(--mono); font-size: .62rem; color: rgba(246,243,238,.22); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.on { opacity: 1; transform: none; }
+.d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; }
+.d3 { transition-delay: .3s; } .d4 { transition-delay: .4s; }
+
+/* MANIFESTO MODAL */
+.overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(14,17,23,.93);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s;
+  backdrop-filter: blur(10px);
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--ink);
+  border: 1px solid rgba(255,255,255,.1);
+  width: min(840px, 92vw); max-height: 90vh;
+  display: flex; flex-direction: column;
+  transform: translateY(18px); transition: transform .35s;
+}
+.overlay.open .modal { transform: none; }
+.modal-head {
+  padding: 1.8rem 2.5rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-shrink: 0;
+}
+.modal-eyebrow { font-family: var(--mono); font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: .7rem; }
+.modal-head h2 { font-family: var(--serif); font-size: 1.6rem; color: var(--paper); font-weight: 700; line-height: 1.18; max-width: 580px; }
+.modal-head h2 em { color: var(--accent); }
+.modal-x { font-family: var(--mono); font-size: 1rem; color: rgba(255,255,255,.35); background: none; border: none; cursor: pointer; padding: 0; transition: color .2s; flex-shrink: 0; margin-left: 1.2rem; }
+.modal-x:hover { color: var(--accent); }
+.modal-scroll { overflow-y: auto; padding: 1.8rem 2.5rem 2.5rem; flex: 1; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.12) transparent; }
+.modal-scroll::-webkit-scrollbar { width: 4px; }
+.modal-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 2px; }
+.ms { margin-bottom: 2.2rem; }
+.ms-n {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .15em;
+  color: var(--accent); margin-bottom: .65rem;
+  display: flex; align-items: center; gap: .7rem;
+}
+.ms-n::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.07); }
+.ms-t { font-family: var(--serif); font-size: 1.1rem; color: var(--paper); font-weight: 700; margin-bottom: .65rem; }
+.ms-b { font-size: .87rem; color: rgba(246,243,238,.58); line-height: 1.85; }
+.ms-b em { color: rgba(246,243,238,.85); font-style: italic; }
+.modal-foot {
+  padding: 1.1rem 2.5rem; border-top: 1px solid rgba(255,255,255,.07);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.modal-foot p { font-family: var(--mono); font-size: .62rem; color: rgba(255,255,255,.28); letter-spacing: .06em; }
+
+@media (max-width: 900px) {
+  nav { padding: .9rem 1.5rem; }
+  nav ul { gap: 1rem; }
+  #hero { grid-template-columns: 1fr; }
+  .hero-right { height: 38vh; }
+  .hero-left { padding: 5rem 1.5rem 3rem; }
+  section { padding: 4.5rem 1.5rem; }
+  .about-grid, .join-grid, .work-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .res-grid { grid-template-columns: 1fr 1fr; }
+  .proj-row { grid-template-columns: 44px 1fr; }
+  .proj-desc, .proj-cta { display: none; }
+  footer { grid-template-columns: 1fr; }
+  .f-contact { text-align: left; }
+  .f-links { align-items: flex-start; }
+  .f-bottom { flex-direction: column; gap: .4rem; }
+  .modal-head { padding: 1.4rem 1.4rem 1rem; }
+  .modal-scroll { padding: 1.2rem 1.4rem 2rem; }
+  .modal-foot { padding: 1rem 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- MANIFESTO MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div>
+        <div class="modal-eyebrow">SAL Manifesto</div>
+        <h2>The Methodological Dilemma of Sociology:<br><em>Insufficient Mathematics, or Insufficient Scholarship?</em></h2>
+      </div>
+      <button class="modal-x" id="modal-x" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-scroll">
+      <div class="ms">
+        <div class="ms-n">§ 01</div>
+        <div class="ms-t">A 45-Year-Old Diagnosis That Still Stings</div>
+        <div class="ms-b">In 1989, Hubert M. Blalock Jr. wrote in the <em>American Sociological Review</em> that "Sociology is not a high-quality discipline." Sociology students score at the bottom on standardised tests — not only in quantitative reasoning, but in verbal reasoning. Between 1950 and 2010, the proportion of quantitative articles in Britain's leading sociology journals fell from 32% to 16%, while qualitative research rose from 8% to 43%. Over 60% of sociology students prefer writing essays to analysing data. This is not mere method preference. It reflects a disciplinary culture in which the rejection of mathematical training is an open secret.</div>
+      </div>
+      <div class="ms">
+        <div class="ms-n">§ 02</div>
+        <div class="ms-t">The "Lightning Argument" and Its Limits</div>
+        <div class="ms-b">The common defence for avoiding formalisation holds that social phenomena are instantaneous and local — formalized language cannot capture a world of meaning constructed through subjective human interpretation. David Bloor's Strong Programme pushes further: even mathematical truths are social constructs, making their application to a fluid social world epistemologically suspect. This critique has deep institutional roots; by the 1960s, an <em>anti-quantitative culture</em> was systematically built into the expanding university system. But equating mathematical modelling with the pursuit of "eternal truth" is itself a narrow view. As Ravetz argued, models are metaphors — their value lies in facilitating dialogue and clarifying assumptions, not in perfectly representing reality.</div>
+      </div>
+      <div class="ms">
+        <div class="ms-n">§ 03</div>
+        <div class="ms-t">Two Kinds of Deficits</div>
+        <div class="ms-b">We must ask a sharper question: Is it that mathematics cannot yet accurately describe social facts — or is it that sociologists' mathematical proficiency has not reached the point where they could use it to do so? Economics offers a reference: from Cournot to Arrow–Debreu, mathematical formalisation was contested but maintained its ambition. Mathematical sociology, by contrast, has largely failed — not because the project is impossible, but because mathematical sociologists themselves misunderstood the role models should play: treating them as tools for empirical generalisation rather than as <em>creative instruments for theory construction</em>. The gap is not in mathematics itself. It is cognitive: the distance between existing formal tools and sociology's core concerns around meaning, context, and historicity.</div>
+      </div>
+      <div class="ms">
+        <div class="ms-n">§ 04</div>
+        <div class="ms-t">A Plurality of Models</div>
+        <div class="ms-b">Quantitative sociology is far more than regression. We distinguish at least five types: statistical models (regression, SEM, multilevel, causal inference); network models (centrality, ERGMs, community detection); dynamical systems (differential equations, opinion dynamics, cultural diffusion — once prominent in mathematical sociology, now nearly absent); discrete and logical models (rational choice, axiomatic theory); and computational models (ABM, machine learning). Contemporary quantitative sociology is dangerously concentrated on statistical models alone. When causal inference becomes the only legitimate goal, regression becomes the only legitimate tool — and the model toolkit impoverishes itself. Blalock's insight was that the value of mathematical modelling extends far beyond causal estimation; its fundamental function is to clarify concepts and locate troublesome issues in theory.</div>
+      </div>
+      <div class="ms">
+        <div class="ms-n">§ 05</div>
+        <div class="ms-t">Self-Auditing as Method</div>
+        <div class="ms-b">Sensitivity Analysis and Sensitivity Auditing — as developed by Saltelli and Puy — provide operational tools for quantitative self-reflection. SA systematically varies inputs and assumptions to assess which factors drive conclusions. SAUD extends the audit to the full modelling process: what interests, blind spots, and value presuppositions are embedded? The core claim: the quality of numbers requires <em>technical rigour and normative transparency</em>. Applied to sociology — does a regression's core coefficient survive changes in control variables? Does a network model embed the assumption that denser ties are better? Does an ABM's behavioural rule implicitly assume a specific conception of rationality? These questions force quantitative research out of the black box and into a broader community of scrutiny.</div>
+      </div>
+      <div class="ms">
+        <div class="ms-n">§ 06</div>
+        <div class="ms-t">Toward Reflexive Quantitative Sociology</div>
+        <div class="ms-b">A reflexive quantitative sociology requires three capacities simultaneously: solid mathematical and statistical training that extends beyond regression to differential equations, graph theory, and game theory; keen theoretical intuition to judge what is worth quantifying and what is not; and a clear awareness that even the most "objective" quantitative methods embed specific value presuppositions and cognitive frameworks. This reflexivity may be the bridge between positivist and interpretive sociology. As Harrison White once said: <em>"I cannot imagine achieving what we want without mathematics at all. But the mathematics we need may not be the mathematics we currently have."</em> The inadequacy of existing tools is not a reason to abandon formalisation — it is an invitation to explore new mathematical languages capable of capturing fluidity and complexity. The real danger is not using mathematics, but abusing it: letting methods dominate questions, and letting technique replace thought.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <p>Sociological Analysis Lab · Open Access</p>
+      <button class="btn-dark" id="modal-close-btn" style="font-size:.65rem; padding:.6rem 1.4rem;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="topnav">
+<div class="brand">
+  <a href="#hero" class="nav-logo">SAL</a>
+  <span class="brand-sub">Sociological Analysis Lab</span>
+</div>  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Research</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><button class="btn-nav-manifesto" onclick="openM()">Manifesto</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Sociological Analysis Lab</div>
+    <h1>Quantitative Sociology<br><em>for Social Good</em></h1>
+    <p class="hero-desc">SAL is an open-source research organisation grounded in quantitative methods and oriented toward social questions — applying mathematical modelling, data science, and AI to real-world sociological problems.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-dark">Explore Research</a>
+      <a href="#join" class="btn-ghost">Join / Collaborate</a>
+      <button class="btn-accent-outline" onclick="openM()">Read Our Manifesto →</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <canvas id="net-canvas"></canvas>
+    <div class="hero-stats">
+      <div class="stat-cell"><div class="stat-n">3+</div><div class="stat-l">Active Projects</div></div>
+      <div class="stat-cell"><div class="stat-n">MIT</div><div class="stat-l">Open Licence</div></div>
+      <div class="stat-cell"><div class="stat-n">∞</div><div class="stat-l">Open Access</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <span class="ticker-inner">Causal Inference &nbsp;·&nbsp; Network Analysis &nbsp;·&nbsp; Factorial Survey Experiments &nbsp;·&nbsp; Random Coefficient Models &nbsp;·&nbsp; Computational Simulation &nbsp;·&nbsp; Machine Learning &nbsp;·&nbsp; Automation Bias &nbsp;·&nbsp; Reproducible Research &nbsp;·&nbsp; Open Science &nbsp;·&nbsp; Social Psychology &nbsp;·&nbsp; Causal Inference &nbsp;·&nbsp; Network Analysis &nbsp;·&nbsp; Factorial Survey Experiments &nbsp;·&nbsp; Random Coefficient Models &nbsp;·&nbsp; Computational Simulation &nbsp;·&nbsp; Machine Learning &nbsp;·&nbsp; Automation Bias &nbsp;·&nbsp; Reproducible Research &nbsp;·&nbsp; Open Science &nbsp;·&nbsp; Social Psychology &nbsp;·&nbsp;</span>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-head"><span class="sec-num">01</span><h2>About SAL</h2><div class="sec-rule"></div></div>
+  <div class="about-grid">
+    <div class="about-body reveal">
+      <p>SAL emerges from a reflection on contemporary sociology's methodological dilemma: on one side, a widespread avoidance of quantification; on the other, quantitative practice often dominated by technicalism — disconnected from theory and the problem itself.</p>
+      <p>Our position is that quantification is neither the goal nor the problem. <strong>The question is always how it is used.</strong> SAL advocates a reflexive quantitative approach that connects sociology, statistics, and computational science to build an accumulative social-scientific knowledge base.</p>
+      <p>Our aim is not to increase publication counts but to <strong>improve the explanatory power, verifiability, and social relevance</strong> of research. The question we always return to: how can quantitative methods genuinely help us understand society — and matter in the real world?</p>
+    </div>
+    <div class="principles reveal d2">
+      <div class="principle">
+        <div class="p-num">P.01</div>
+        <div><div class="p-title">Clarity about model assumptions</div><div class="p-desc">Every model embeds presuppositions. We name them, test their sensitivity, and never let technique substitute for theory.</div></div>
+      </div>
+      <div class="principle">
+        <div class="p-num">P.02</div>
+        <div><div class="p-title">The question comes first</div><div class="p-desc">Method selection follows from the research question. The quality of the question determines the meaning of the method.</div></div>
+      </div>
+      <div class="principle">
+        <div class="p-num">P.03</div>
+        <div><div class="p-title">Methodological transparency</div><div class="p-desc">All code, data, and analytical documentation are published openly. Reproducibility is non-negotiable.</div></div>
+      </div>
+      <div class="principle">
+        <div class="p-num">P.04</div>
+        <div><div class="p-title">Pluralist methods</div><div class="p-desc">We resist reducing quantification to a single technique. Statistical models, network models, simulation, and causal inference each illuminate different aspects of social reality.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Research Directions</h2><div class="sec-rule"></div></div>
+  <div class="work-grid">
+    <div class="work-card reveal">
+      <div class="wc-track">Track 01 — Open Technology</div>
+      <h3>Open-Source Tools &amp; Social Application</h3>
+      <p>We develop and publish quantitative analysis tools and data pipelines, applying them to education equity, social psychology, and public policy. All code and models are released openly to ensure accessibility and research transparency.</p>
+      <div class="tags"><span class="tag">R / Python</span><span class="tag">Open toolchains</span><span class="tag">Reproducible</span><span class="tag">GitHub</span></div>
+    </div>
+    <div class="work-card reveal d1">
+      <div class="wc-track">Track 02 — Quantitative Sociology</div>
+      <h3>Mechanism-Oriented Quantitative Research</h3>
+      <p>Research drawing on causal inference, network models, computational simulation, and machine learning — oriented toward mechanism explanation rather than mere pattern description. We argue for a pluralist methodological toolkit against technicalist reduction.</p>
+      <div class="tags"><span class="tag">Causal Inference</span><span class="tag">Network Models</span><span class="tag">Simulation</span><span class="tag">ML</span></div>
+    </div>
+    <div class="work-card reveal d2">
+      <div class="wc-track">Focus 01 — Social Behaviour</div>
+      <h3>Modelling Social Behaviour &amp; Attitudes</h3>
+      <p>Formal models of attitude formation, norm compliance, and collective action — exploring falsifiable quantitative explanatory frameworks, with methods including factorial survey experiments and random coefficient models.</p>
+      <div class="tags"><span class="tag">FSE</span><span class="tag">Random Coefficients</span><span class="tag">Multilevel Models</span></div>
+    </div>
+    <div class="work-card reveal d3">
+      <div class="wc-track">Focus 02 — Human–AI Interaction</div>
+      <h3>Automation Bias &amp; AI Decision-Making</h3>
+      <p>Research on decision and trust mechanisms in human–AI interaction, focused on the conditions under which automation bias forms, its cross-cultural variation, and possibilities for intervention.</p>
+      <div class="tags"><span class="tag">Automation Bias</span><span class="tag">AI Trust</span><span class="tag">Cross-Cultural</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Current Projects</h2><div class="sec-rule"></div></div>
+  <div class="proj-list">
+    <a href="https://shuangyang-wang.gitbook.io/applied-panel-analysis-using-stata/" target="_blank" rel="noopener" class="proj-row reveal">
+      <div class="proj-n">01</div>
+      <div class="proj-name">Applied Panel Data Analysis</div>
+      <div class="proj-desc">Standardised pipeline: fixed effects, dynamic models, and causal inference applied to social mobility and income inequality.</div>
+      <div class="proj-cta">GitBook ↗</div>
+    </a>
+    <a href="https://github.com/LuisSlight/ecgR" target="_blank" rel="noopener" class="proj-row reveal d1">
+      <div class="proj-n">02</div>
+      <div class="proj-name">ecgR — ECG &amp; Social Psychology</div>
+      <div class="proj-desc">An R package with Shiny app for ECG signal visualisation and analysis, combining ML classification with physiological social psychology research. MIT-BIH data support included.</div>
+      <div class="proj-cta">GitHub ↗</div>
+    </a>
+    <div class="proj-row reveal d2" style="cursor:default">
+      <div class="proj-n">03</div>
+      <div class="proj-name">Automation Bias Study</div>
+      <div class="proj-desc">FSE-based experimental design for automation bias, random coefficient modelling, and cross-cultural comparative analysis.</div>
+      <div class="proj-cta">In Progress</div>
+    </div>
+    <div class="proj-row reveal d3" style="cursor:default">
+      <div class="proj-n">04</div>
+      <div class="proj-name">Conditional Relational Sociology</div>
+      <div class="proj-desc">An original theoretical framework reinterpreting R² as a measure of correspondence between cognitive tools and structural conditions; integrates multilevel models, causal forests, and multi-group SEM.</div>
+      <div class="proj-cta">Theory Development</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="sec-head"><span class="sec-num">04</span><h2>Open Resources</h2><div class="sec-rule"></div></div>
+  <p style="font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--muted);margin-bottom:2rem;">All resources released under MIT / CC BY-NC licences — use, modify, redistribute freely.</p>
+  <div class="res-grid">
+    <div class="res-card reveal">
+      <span class="res-icon">&lt;/&gt;</span>
+      <div class="res-title">Code Repositories</div>
+      <div class="res-desc">Panel data pipelines, ECG signal classification models, and sensitivity analysis toolkits. Available on GitHub.</div>
+    </div>
+    <div class="res-card reveal d1">
+      <span class="res-icon">⊞</span>
+      <div class="res-title">Public Datasets</div>
+      <div class="res-desc">Anonymised sample data and curated indices pointing to authoritative open datasets with usage guides.</div>
+    </div>
+    <div class="res-card reveal d2">
+      <span class="res-icon">∫</span>
+      <div class="res-title">Methods Guides</div>
+      <div class="res-desc">Step-by-step documentation from linear regression to multi-agent simulation, with reproducible R and Python scripts.</div>
+    </div>
+    <div class="res-card reveal d3">
+      <span class="res-icon">◎</span>
+      <div class="res-title">Replication Packages</div>
+      <div class="res-desc">Complete code, data, and environment configurations for published analyses — fully verifiable and rerunnable results.</div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Join / Collaborate</h2><div class="sec-rule"></div></div>
+  <div class="join-grid">
+    <div>
+      <p class="join-intro reveal">SAL is an open, non-profit collaborative network. We welcome researchers, developers, students, and organisations who want to advance rigorous, reflexive quantitative social science.</p>
+      <div class="roles reveal d1">
+        <div class="role">
+          <div class="role-tag">Researchers</div>
+          <div class="role-text">Working in <strong>quantitative sociology or computational social science</strong>? We welcome methodological exchange, data sharing, and collaborative research.</div>
+        </div>
+        <div class="role">
+          <div class="role-tag">Developers</div>
+          <div class="role-text">Willing to <strong>contribute code, improve toolchains</strong>, or build visualisation interfaces? Contribute to our open-source projects.</div>
+        </div>
+        <div class="role">
+          <div class="role-tag">Students</div>
+          <div class="role-text">We organise <strong>open workshops, data challenges</strong>, and paper reading groups. Volunteers are always welcome.</div>
+        </div>
+        <div class="role">
+          <div class="role-tag">Organisations</div>
+          <div class="role-text">Institutions wishing to use SAL tools for <strong>social service or policy analysis</strong> — non-commercial partnerships are welcome.</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-box reveal d2">
+      <h3>Send a Message</h3>
+      <div class="field"><label>Name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+      <div class="field">
+        <label>Role</label>
+        <select>
+          <option value="">Please select…</option>
+          <option>Researcher</option><option>Developer</option>
+          <option>Student / Volunteer</option><option>Organisation</option><option>Other</option>
+        </select>
+      </div>
+      <div class="field"><label>Message</label><textarea placeholder="Briefly describe your background or collaboration idea…"></textarea></div>
+      <button class="btn-send" id="send-btn">Submit →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="f-logo">SAL<sup>.</sup></div>
+    <div class="f-sub">Sociological Analysis Lab — Quantitative Sociology for Social Good</div>
+  </div>
+  <div class="f-links">
+    <a href="#about">About</a>
+    <a href="#work">Research</a>
+    <a href="#projects">Projects</a>
+    <a href="https://github.com/LuisSlight/ecgR" target="_blank">GitHub</a>
+    <a href="https://shuangyang-wang.gitbook.io/applied-panel-analysis-using-stata/" target="_blank">GitBook</a>
+    <a onclick="openM()">Manifesto</a>
+  </div>
+  <div class="f-contact">
+    <p>
+      <a href="mailto:slightlightnight@gmail.com">slightlightnight@gmail.com</a><br>
+      <a href="mailto:S.Wang2@campus.lmu.de">S.Wang2@campus.lmu.de</a><br>
+      Shuangyang Wang · LMU München
+    </p>
+  </div>
+</footer>
+<div class="f-bottom">
+  <p>© 2025 Sociological Analysis Lab. Released under MIT / CC BY-NC.</p>
+  <p>We are committed to a welcoming, respectful, and anti-discriminatory collaborative environment.</p>
+</div>
+
+<script>
+/* NETWORK CANVAS */
+(function(){
+  const cv=document.getElementById('net-canvas'), ctx=cv.getContext('2d');
+  let ns=[],W,H;
+  function rsz(){ W=cv.width=cv.offsetWidth; H=cv.height=cv.offsetHeight; }
+  function init(){ rsz(); ns=Array.from({length:48},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.36,vy:(Math.random()-.5)*.36,r:Math.random()*2.2+.8,p:Math.random()*Math.PI*2})); }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<ns.length;i++) for(let j=i+1;j<ns.length;j++){
+      const d=Math.hypot(ns[i].x-ns[j].x,ns[i].y-ns[j].y);
+      if(d<112){ ctx.strokeStyle=`rgba(191,77,40,${(1-d/112)*.2})`; ctx.lineWidth=.65; ctx.beginPath(); ctx.moveTo(ns[i].x,ns[i].y); ctx.lineTo(ns[j].x,ns[j].y); ctx.stroke(); }
+    }
+    ns.forEach(n=>{ n.p+=.021; const g=Math.sin(n.p)*.5+.5; ctx.beginPath(); ctx.arc(n.x,n.y,n.r+g*1.3,0,Math.PI*2); ctx.fillStyle=`rgba(255,255,255,${.27+g*.36})`; ctx.fill(); n.x+=n.vx; n.y+=n.vy; if(n.x<0||n.x>W)n.vx*=-1; if(n.y<0||n.y>H)n.vy*=-1; });
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize',rsz); init(); frame();
+})();
+
+/* SCROLL REVEAL */
+const rv=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');rv.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>rv.observe(el));
+
+/* NAV SHRINK */
+window.addEventListener('scroll',()=>{ 
+  document.getElementById('topnav').style.padding = scrollY > 60 ? '.7rem 2.4rem' : '1.1rem 2.4rem'; 
+});
+/* MANIFESTO */
+function openM(){ document.getElementById('overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeM(){ document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('modal-x').onclick=closeM;
+document.getElementById('modal-close-btn').onclick=closeM;
+document.getElementById('overlay').addEventListener('click',function(e){ if(e.target===this)closeM(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeM(); });
+
+/* CONTACT */
+document.getElementById('send-btn').addEventListener('click',function(){
+  const ff=document.querySelectorAll('#join input,#join textarea,#join select');
+  let ok=true; ff.forEach(f=>{if(!f.value)ok=false;});
+  if(!ok){ this.textContent='Please fill in all fields'; this.style.background='#555'; setTimeout(()=>{this.textContent='Submit →';this.style.background='';},2200); return; }
+  this.textContent='✓ Message Sent'; this.style.background='#2a6e3f'; ff.forEach(f=>f.value='');
+  setTimeout(()=>{this.textContent='Submit →';this.style.background='';},3000);
+});
+</script>
+</body>
+</html>
