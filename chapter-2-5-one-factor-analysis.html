@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2.5: A Complete Manual Derivation of One-Factor Analysis | SAL</title>
+<meta name="description" content="A worked textbook chapter deriving a one-factor analysis model by hand, from the measurement equation to loadings, uniquenesses, reconstructed covariance, Stata verification, and factor scores.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sociologicalanalysis.org/chapter-2-5-one-factor-analysis.html">
+<meta property="og:title" content="Chapter 2.5: A Complete Manual Derivation of One-Factor Analysis">
+<meta property="og:description" content="A worked textbook chapter deriving a one-factor analysis model by hand, from the measurement equation to loadings, uniquenesses, reconstructed covariance, Stata verification, and factor scores.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://sociologicalanalysis.org/chapter-2-5-one-factor-analysis.html">
+<meta property="og:site_name" content="Sociological Analysis Lab">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Instrument+Sans:wght@400;500;600;700&family=Inconsolata:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --ink:#10243f; --paper:#ffffff; --warm:#f4f7fb; --accent:#c35a2e;
+  --blue:#14365d; --blue-mid:#2c5f8f; --muted:#596a7d; --rule:#d9e1ea;
+  --soft-blue:#eef4fa; --serif:'Playfair Display', Georgia, serif;
+  --sans:'Instrument Sans', sans-serif; --mono:'Inconsolata', monospace;
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:var(--sans); color:var(--ink); background:var(--paper); line-height:1.75; }
+nav { position:sticky; top:0; z-index:20; display:flex; justify-content:space-between; gap:1rem; align-items:center; padding:1rem clamp(1.2rem,4vw,4rem); background:rgba(255,255,255,.94); border-bottom:1px solid var(--rule); backdrop-filter:blur(16px); }
+.brand { font-family:var(--mono); font-weight:700; letter-spacing:.12em; color:var(--blue); text-decoration:none; }
+.nav-links { display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap; }
+.nav-links a { font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--blue); text-decoration:none; }
+.nav-links a:hover { color:var(--accent); }
+header { padding:5rem clamp(1.4rem,5vw,5rem) 3rem; background:linear-gradient(180deg,#f7f9fc 0%,#fff 100%); border-bottom:1px solid var(--rule); }
+.kicker { font-family:var(--mono); color:var(--accent); letter-spacing:.18em; text-transform:uppercase; font-size:.78rem; margin-bottom:1rem; }
+h1 { max-width:920px; font-family:var(--serif); font-size:clamp(2.3rem,5vw,4.8rem); line-height:1.04; margin:0 0 1rem; color:var(--blue); letter-spacing:0; }
+.subtitle { max-width:780px; color:var(--muted); font-size:1.08rem; }
+.meta { margin-top:1.6rem; font-family:var(--mono); font-size:.74rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+main { display:grid; grid-template-columns:minmax(0,1fr) 17rem; gap:3rem; max-width:1180px; margin:0 auto; padding:3rem clamp(1.2rem,4vw,3rem) 5rem; }
+article { min-width:0; }
+.toc { position:sticky; top:5.5rem; align-self:start; border-left:1px solid var(--rule); padding-left:1.1rem; font-size:.86rem; }
+.toc-title { font-family:var(--mono); color:var(--accent); letter-spacing:.12em; text-transform:uppercase; font-size:.7rem; margin-bottom:.7rem; }
+.toc a { display:block; color:var(--muted); text-decoration:none; margin:.45rem 0; line-height:1.35; }
+.toc a:hover { color:var(--accent); }
+h2 { margin:2.4rem 0 .8rem; font-family:var(--serif); font-size:1.75rem; line-height:1.2; color:var(--blue); letter-spacing:0; }
+h3 { margin:1.6rem 0 .6rem; color:var(--blue-mid); }
+p { margin:0 0 1rem; }
+ul { margin:0 0 1.2rem 1.25rem; padding:0; }
+li { margin:.35rem 0; }
+blockquote { margin:2rem 0; padding:1.1rem 1.25rem; border-left:4px solid var(--accent); background:var(--warm); color:var(--blue); font-size:1.02rem; }
+hr { border:0; border-top:1px solid var(--rule); margin:2rem 0; }
+.math-display { overflow-x:auto; margin:1.2rem 0; padding:.3rem 0; }
+pre { overflow-x:auto; background:#0f2238; color:#f6fbff; padding:1rem; border-radius:6px; line-height:1.45; font-size:.92rem; }
+code { font-family:var(--mono); }
+p code { background:var(--soft-blue); color:var(--blue); padding:.1rem .3rem; border-radius:4px; }
+.table-wrap { overflow-x:auto; margin:1.1rem 0 1.4rem; }
+table { width:100%; border-collapse:collapse; border:1px solid var(--rule); font-size:.96rem; }
+th,td { border:1px solid var(--rule); padding:.62rem .7rem; vertical-align:top; }
+th { text-align:left; background:var(--soft-blue); color:var(--blue); font-weight:700; }
+td:nth-child(n+2), th:nth-child(n+2) { text-align:left; }
+footer { border-top:1px solid var(--rule); padding:2rem clamp(1.2rem,4vw,4rem); color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+footer a { color:var(--blue); }
+@media (max-width:900px) {
+  main { display:block; }
+  .toc { position:relative; top:auto; margin-bottom:2rem; }
+  nav { align-items:flex-start; flex-direction:column; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="/">SAL</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/#resources">Open Materials</a>
+    <a href="/gitbook/chapter-2-5-one-factor-analysis.md">GitBook Markdown</a>
+    <a href="/assets/docs/chapter-2-5-one-factor-analysis.docx">DOCX</a>
+  </div>
+</nav>
+<header>
+  <div class="kicker">Quantitative Social Science from First Principles</div>
+  <h1>Chapter 2.5: A Complete Manual Derivation of One-Factor Analysis</h1>
+  <p class="subtitle">From \(Q_i = \lambda_iF + \varepsilon_i\) to \(\Sigma = \Lambda\Lambda' + \Psi\)</p>
+  <div class="meta">Sociological Analysis Lab · 2026 · Part I: Measurement</div>
+</header>
+<main>
+  <article>
+<blockquote><strong>From \(Q_i = \lambda_iF + \varepsilon_i\) to \(\Sigma = \Lambda\Lambda&#x27; + \Psi\)</strong></blockquote>
+<p>At this point, we have established the measurement model (Section 2.1), derived how a latent factor leaves its fingerprint in the covariance structure (Sections 2.2-2.3), and expressed the full result in matrix form (Section 2.4). The purpose of this section is to bring everything together in one place.</p>
+<p>We will walk through a complete worked example from start to finish: simulating data with a <em>known</em> underlying structure, discarding the hidden mechanism, and then <em>recovering</em> it by hand using only the observable correlations. At the end, we verify the result against Stata&#x27;s built-in estimator.</p>
+<p>The goal is not to introduce a new technique. It is to make the whole derivation visible as one coherent object.</p>
+<p>After completing this section, you should be able to:</p>
+<ul>
+<li>explain how a latent factor generates observable correlations;</li>
+<li>derive the covariance equation \(\operatorname{Cov}(Q_i,Q_j)=\lambda_i\lambda_j\);</li>
+<li>derive the variance decomposition \(\operatorname{Var}(Q_i)=\lambda_i^2+\psi_i\);</li>
+<li>explain why \(\Sigma=\Lambda\Lambda&#x27; + \Psi\) is a compact representation of many covariance equations;</li>
+<li>reproduce a one-factor solution manually; and</li>
+<li>verify the derivation using Stata.</li>
+</ul>
+<hr>
+<h2 id="step-0-the-setup-a-survey-of-statistical-anxiety">Step 0. The Setup: A Survey of Statistical Anxiety</h2>
+<p>Suppose we are designing a short questionnaire to measure <strong>statistical anxiety</strong>, an unobservable psychological disposition. We write three items:</p>
+<div class="table-wrap"><table>
+<tr><th>Item</th><th>Wording</th></tr>
+<tr><td>\(q_1\)</td><td>&quot;Statistics formulas make me nervous.&quot;</td></tr>
+<tr><td>\(q_2\)</td><td>&quot;I worry that I cannot learn statistics.&quot;</td></tr>
+<tr><td>\(q_3\)</td><td>&quot;I feel anxious when doing statistics problems.&quot;</td></tr>
+</table></div>
+<p>We assume that all three items are caused by a single latent factor \(F\), interpreted as anxiety. The measurement model is</p>
+<div class="math-display">\[Q_i = \lambda_iF + \varepsilon_i,\qquad i=1,2,3 .\]</div>
+<p>The true parameter values, known to us as data generators but unknown to the analyst, are</p>
+<div class="math-display">\[\lambda_1=0.83,\qquad \lambda_2=0.87,\qquad \lambda_3=0.78,\]</div>
+<p>and</p>
+<div class="math-display">\[\psi_1=0.31,\qquad \psi_2=0.24,\qquad \psi_3=0.39 .\]</div>
+<p>Here \(\lambda_i\) is the loading for item \(i\), and \(\psi_i=\operatorname{Var}(\varepsilon_i)\) is its unique variance.</p>
+<h2 id="step-1-simulate-data-from-the-known-model">Step 1. Simulate Data from the Known Model</h2>
+<p>We generate \(N=100\) observations. First, we draw the latent factor</p>
+<div class="math-display">\[F \sim \mathcal{N}(0,1),\]</div>
+<p>which satisfies the normalization assumption \(\operatorname{Var}(F)=1\). Then we draw independent errors</p>
+<div class="math-display">\[\varepsilon_i \sim \mathcal{N}(0,\psi_i),\]</div>
+<p>ensuring \(\operatorname{Cov}(F,\varepsilon_i)=0\) and \(\operatorname{Cov}(\varepsilon_i,\varepsilon_j)=0\) for \(i\ne j\).</p>
+<pre><code class="language-stata">clear all
+set seed 2026
+set obs 100
+
+* Latent factor: Var(F) = 1
+gen F = rnormal(0, 1)
+
+* Unique errors: independent of F and of each other
+gen epsilon1 = rnormal(0, sqrt(0.31))
+gen epsilon2 = rnormal(0, sqrt(0.24))
+gen epsilon3 = rnormal(0, sqrt(0.39))
+
+* Observed variables: q_i = lambda_i * F + epsilon_i
+gen q1 = 0.83 * F + epsilon1
+gen q2 = 0.87 * F + epsilon2
+gen q3 = 0.78 * F + epsilon3</code></pre>
+<p>We can verify the three assumptions directly in the simulated data:</p>
+<pre><code class="language-stata">* Assumption 1: Cov(F, epsilon_i) is approximately 0
+correlate F epsilon1 epsilon2 epsilon3, covariance
+
+* Assumption 2: Cov(epsilon_i, epsilon_j) is approximately 0 for i != j
+correlate epsilon1 epsilon2 epsilon3, covariance
+
+* Assumption 3: Var(F) is approximately 1
+summarize F</code></pre>
+<p>Now we discard \(F\) and all \(\varepsilon_i\). From this point on, we pretend we are the analyst: we see only \(q_1,q_2,q_3\).</p>
+<pre><code class="language-stata">drop F epsilon1 epsilon2 epsilon3</code></pre>
+<h2 id="step-2-compute-the-sample-covariance-matrix-s">Step 2. Compute the Sample Covariance Matrix \(S\)</h2>
+<p>We standardize the three items so that all variances equal 1. Once the variables are standardized, the covariance matrix is the correlation matrix. This is standard practice in exploratory factor analysis when items are measured on comparable but not identical scales.</p>
+<pre><code class="language-stata">foreach var of varlist q1 q2 q3 {
+    summarize `var&#x27;
+    gen z_`var&#x27; = (`var&#x27; - r(mean)) / r(sd)
+}
+
+correlate z_q1 z_q2 z_q3
+matrix S = r(C)</code></pre>
+<p>The resulting sample correlation matrix is</p>
+<div class="math-display">\[S=
+\begin{pmatrix}
+1     & 0.677 & 0.485\\
+0.677 & 1     & 0.608\\
+0.485 & 0.608 & 1
+\end{pmatrix}.\]</div>
+<p>This is now <strong>all we have to work with</strong>. The task of factor analysis is to find \(\Lambda\) and \(\Psi\) such that</p>
+<div class="math-display">\[\Lambda\Lambda' + \Psi \approx S .\]</div>
+<p>The latent factor \(F\) has been discarded. We must recover its structure from the correlations alone.</p>
+<h2 id="step-3-estimate-the-loadings-lambda-from-off-diagonal-elements">Step 3. Estimate the Loadings \(\lambda\) from Off-Diagonal Elements</h2>
+<p>Recall from Section 2.2 that, under the three assumptions,</p>
+<div class="math-display">\[\operatorname{Cov}(q_i,q_j)=\lambda_i\lambda_j,\qquad i\ne j .\]</div>
+<p>Because a one-factor model with three standardized variables contains exactly three unknown loadings and three off-diagonal correlations, the system is exactly identified. This allows us to solve the loadings algebraically, without iterative optimization.</p>
+<p>The three equations are</p>
+<div class="math-display">\[r_{12}=\lambda_1\lambda_2,\qquad
+r_{13}=\lambda_1\lambda_3,\qquad
+r_{23}=\lambda_2\lambda_3 .\]</div>
+<p>Divide the first equation by the third:</p>
+<div class="math-display">\[\frac{r_{12}}{r_{23}}
+=
+\frac{\lambda_1\lambda_2}{\lambda_2\lambda_3}
+=
+\frac{\lambda_1}{\lambda_3}.\]</div>
+<p>Similarly,</p>
+<div class="math-display">\[\frac{r_{12}}{r_{13}}=\frac{\lambda_2}{\lambda_3}.\]</div>
+<p>Substitute this relation back into \(r_{23}=\lambda_2\lambda_3\):</p>
+<div class="math-display">\[r_{23}
+=
+\left(\frac{r_{12}}{r_{13}}\lambda_3\right)\lambda_3
+=
+\frac{r_{12}}{r_{13}}\lambda_3^2 .\]</div>
+<p>Solving for the third loading gives</p>
+<div class="math-display">\[\lambda_3
+=
+\sqrt{\frac{r_{23}r_{13}}{r_{12}}}.\]</div>
+<p>The remaining two loadings follow immediately:</p>
+<div class="math-display">\[\lambda_1=\frac{r_{13}}{\lambda_3},
+\qquad
+\lambda_2=\frac{r_{23}}{\lambda_3}.\]</div>
+<p>Equivalently, using the ratios above,</p>
+<div class="math-display">\[\lambda_1=\left(\frac{r_{12}}{r_{23}}\right)\lambda_3,
+\qquad
+\lambda_2=\left(\frac{r_{12}}{r_{13}}\right)\lambda_3 .\]</div>
+<p>In Stata:</p>
+<pre><code class="language-stata">local r12 = S[1,2]    // 0.6766
+local r13 = S[1,3]    // 0.4848
+local r23 = S[2,3]    // 0.6080
+
+local ratio_1 = `r12&#x27; / `r23&#x27;    // lambda_1 / lambda_3
+local ratio_2 = `r12&#x27; / `r13&#x27;    // lambda_2 / lambda_3
+
+local lambda3 = sqrt(`r23&#x27; / `ratio_2&#x27;)
+local lambda1 = `ratio_1&#x27; * `lambda3&#x27;
+local lambda2 = `ratio_2&#x27; * `lambda3&#x27;</code></pre>
+<p>The estimated loadings are:</p>
+<div class="table-wrap"><table>
+<tr><th>Variable</th><th>Manual \(\hat{\lambda}\)</th><th>True \(\lambda\)</th></tr>
+<tr><td>\(q_1\)</td><td>0.7345</td><td>0.83</td></tr>
+<tr><td>\(q_2\)</td><td>0.9212</td><td>0.87</td></tr>
+<tr><td>\(q_3\)</td><td>0.6601</td><td>0.78</td></tr>
+</table></div>
+<p>The estimates deviate somewhat from the true values. This is expected: with \(N=100\) and a purely algebraic method, sampling variability matters. But the ordering and relative magnitudes are preserved correctly.</p>
+<h2 id="step-4-estimate-the-uniqueness-psi-from-diagonal-elements">Step 4. Estimate the Uniqueness \(\psi\) from Diagonal Elements</h2>
+<p>Recall from Section 2.3 that</p>
+<div class="math-display">\[\operatorname{Var}(q_i)=\lambda_i^2+\psi_i .\]</div>
+<p>Since the variables are standardized, \(\operatorname{Var}(q_i)=1\) for every item. Therefore</p>
+<div class="math-display">\[\psi_i=1-\lambda_i^2 .\]</div>
+<p>The quantity \(\lambda_i^2\) is called the <strong>communality</strong> of item \(i\): the proportion of the item&#x27;s variance explained by the latent factor.</p>
+<pre><code class="language-stata">local psi1 = 1 - `lambda1&#x27;^2
+local psi2 = 1 - `lambda2&#x27;^2
+local psi3 = 1 - `lambda3&#x27;^2</code></pre>
+<div class="table-wrap"><table>
+<tr><th>Variable</th><th>\(\hat{\lambda}\)</th><th>Communality \(\hat{\lambda}^2\)</th><th>Uniqueness \(\hat{\psi}\)</th></tr>
+<tr><td>\(q_1\)</td><td>0.7345</td><td>0.5394</td><td>0.4606</td></tr>
+<tr><td>\(q_2\)</td><td>0.9212</td><td>0.8485</td><td>0.1515</td></tr>
+<tr><td>\(q_3\)</td><td>0.6601</td><td>0.4357</td><td>0.5643</td></tr>
+</table></div>
+<p><strong>Interpretation.</strong> Item \(q_2\), &quot;I worry that I cannot learn statistics,&quot; has the highest communality, approximately 0.85. Nearly all of its variance is accounted for by the latent anxiety factor, making it the purest indicator. Item \(q_3\) has the most unique variance, which means it appears to capture something that the common factor alone does not fully explain.</p>
+<h2 id="step-5-reconstruct-hat-sigma-lambda-lambda-psi">Step 5. Reconstruct \(\hat{\Sigma}=\Lambda\Lambda&#x27; + \Psi\)</h2>
+<p>We now verify that our estimated parameters reproduce the original correlation matrix. Construct the loading vector and uniqueness matrix:</p>
+<div class="math-display">\[\hat{\Lambda}
+=
+\begin{pmatrix}
+0.7345\\
+0.9212\\
+0.6601
+\end{pmatrix},
+\qquad
+\hat{\Psi}
+=
+\begin{pmatrix}
+0.4606 & 0      & 0\\
+0      & 0.1515 & 0\\
+0      & 0      & 0.5643
+\end{pmatrix}.\]</div>
+<p>In Stata:</p>
+<pre><code class="language-stata">matrix LAMBDA = [`lambda1&#x27; \ `lambda2&#x27; \ `lambda3&#x27;]
+matrix PSI    = diag((`psi1&#x27;, `psi2&#x27;, `psi3&#x27;))
+
+matrix SIGMA_HAT = LAMBDA * LAMBDA&#x27; + PSI
+matrix RESIDUAL  = S - SIGMA_HAT
+
+matrix list RESIDUAL</code></pre>
+<p>The residual matrix is</p>
+<div class="math-display">\[S-\hat{\Sigma}
+\approx
+\begin{pmatrix}
+0 & -4.4\times10^{-16} & -1.7\times10^{-16}\\
+\cdot & 0 & -1.1\times10^{-16}\\
+\cdot & \cdot & 0
+\end{pmatrix}.\]</div>
+<p>The off-diagonal residuals are numerically zero; the small values are only floating-point rounding. This confirms that the algebraic solution exactly reproduces \(S\). In real data, non-zero residuals indicate sampling variability, model misspecification, or too few factors.</p>
+<h2 id="step-6-verify-against-stata-s-built-in-estimator">Step 6. Verify Against Stata&#x27;s Built-In Estimator</h2>
+<p>Stata&#x27;s <code>factor</code> command uses iterative principal factors (IPF), a more sophisticated algorithm than our algebraic solution. We compare:</p>
+<pre><code class="language-stata">factor z_q1 z_q2 z_q3, ipf factors(1)</code></pre>
+<p>Stata&#x27;s output is:</p>
+<pre><code class="language-text">Factor loadings (pattern matrix) and unique variances
+
+    Variable |  Factor1 |   Uniqueness
+    ---------+----------+--------------
+        z_q1 |   0.7346 |      0.4604
+        z_q2 |   0.9210 |      0.1518
+        z_q3 |   0.6601 |      0.5642</code></pre>
+<p>Comparing Stata to the manual estimates:</p>
+<div class="table-wrap"><table>
+<tr><th>Parameter</th><th>Manual</th><th>Stata IPF</th></tr>
+<tr><td>\(\hat{\lambda}_1\)</td><td>0.7345</td><td>0.7346</td></tr>
+<tr><td>\(\hat{\lambda}_2\)</td><td>0.9212</td><td>0.9210</td></tr>
+<tr><td>\(\hat{\lambda}_3\)</td><td>0.6601</td><td>0.6601</td></tr>
+<tr><td>\(\hat{\psi}_1\)</td><td>0.4606</td><td>0.4604</td></tr>
+<tr><td>\(\hat{\psi}_2\)</td><td>0.1515</td><td>0.1518</td></tr>
+<tr><td>\(\hat{\psi}_3\)</td><td>0.5643</td><td>0.5642</td></tr>
+</table></div>
+<p>The results are virtually identical. The small differences arise because Stata&#x27;s IPF algorithm iterates to a refined solution, while our algebraic approach solves the exactly identified system directly. The underlying logic is the same: find the loading matrix \(\Lambda\) and uniqueness matrix \(\Psi\) that reproduce the observed covariance structure.</p>
+<h2 id="step-7-computing-factor-scores">Step 7. Computing Factor Scores</h2>
+<p>Once loadings are estimated, we can compute a <strong>factor score</strong> for each respondent: a weighted composite of responses that serves as the best reconstruction of the respondent&#x27;s underlying anxiety level.</p>
+<pre><code class="language-stata">predict factor_score
+label variable factor_score &quot;Statistical Anxiety (Factor Score)&quot;
+
+summarize factor_score</code></pre>
+<p>The scoring coefficients printed by Stata indicate the weight assigned to each item:</p>
+<div class="table-wrap"><table>
+<tr><th>Item</th><th>Scoring weight</th></tr>
+<tr><td>\(z_{q_1}\)</td><td>0.187</td></tr>
+<tr><td>\(z_{q_2}\)</td><td>0.711</td></tr>
+<tr><td>\(z_{q_3}\)</td><td>0.137</td></tr>
+</table></div>
+<p>Notice that \(q_2\), the item with the highest loading, receives the greatest weight. This is not arbitrary. Items that are more strongly connected to the latent factor carry more information about it, and the regression-based scoring method formalizes this intuition.</p>
+<p>Factor scores are standardized: \(\bar{F}\approx0\) and \(\operatorname{SD}(F)\approx1\). A score of \(+1\) indicates a respondent one standard deviation above average in statistical anxiety; \(-1\) indicates one standard deviation below average.</p>
+<h2 id="summary-the-complete-logic-chain">Summary: The Complete Logic Chain</h2>
+<p>The derivation in this section follows a single continuous thread:</p>
+<div class="math-display">\[\underbrace{Q_i=\lambda_iF+\varepsilon_i}_{\text{measurement model}}
+\xrightarrow{\text{assumptions}}
+\underbrace{\operatorname{Cov}(q_i,q_j)=\lambda_i\lambda_j}_{\text{off-diagonal fingerprint}}
+\xrightarrow{\text{solve}}
+\underbrace{\hat{\lambda}_i}_{\text{estimated loadings}} .\]</div>
+<p>The diagonal elements provide the second part:</p>
+<div class="math-display">\[\underbrace{\operatorname{Var}(q_i)=\lambda_i^2+\psi_i}_{\text{variance decomposition}}
+\xrightarrow{\text{solve}}
+\underbrace{\hat{\psi}_i=1-\hat{\lambda}_i^2}_{\text{estimated uniqueness}}
+\xrightarrow{\text{combine}}
+\underbrace{\hat{\Sigma}=\hat{\Lambda}\hat{\Lambda}' + \hat{\Psi}\approx S}_{\text{model reproduction}} .\]</div>
+<p>The matrix equation</p>
+<div class="math-display">\[\Sigma=\Lambda\Lambda' + \Psi\]</div>
+<p>is not a new model. It is simply a compact notation for the covariance equations derived from the measurement model. Every element in that matrix corresponds to a statement about how observable variables co-vary because they share a common cause.</p>
+<blockquote><strong>Core insight.</strong> The latent factor \(F\) is unobservable, but it is not undetectable. Its presence leaves a systematic fingerprint in the off-diagonal elements of the correlation matrix. Factor analysis is the method for reading that fingerprint: recovering the hidden structure that generated the correlations we observe.</blockquote>
+  </article>
+  <aside class="toc">
+    <div class="toc-title">Chapter Navigation</div>
+    <a href="#step-0-the-setup-a-survey-of-statistical-anxiety">Step 0 · Setup</a>
+    <a href="#step-1-simulate-data-from-the-known-model">Step 1 · Simulate data</a>
+    <a href="#step-2-compute-the-sample-covariance-matrix-s">Step 2 · Matrix S</a>
+    <a href="#step-3-estimate-the-loadings-lambda-from-off-diagonal-elements">Step 3 · Loadings</a>
+    <a href="#step-4-estimate-the-uniqueness-psi-from-diagonal-elements">Step 4 · Uniqueness</a>
+    <a href="#step-5-reconstruct-hat-sigma-lambda-lambda-psi">Step 5 · Reconstruct Sigma</a>
+    <a href="#step-6-verify-against-stata-s-built-in-estimator">Step 6 · Stata check</a>
+    <a href="#step-7-computing-factor-scores">Step 7 · Factor scores</a>
+    <a href="#summary-the-complete-logic-chain">Summary</a>
+  </aside>
+</main>
+<footer>
+  <span>Sociological Analysis Lab (SAL)</span>
+  <span><a href="/">Home</a> · <a href="/sitemap.xml">Sitemap</a></span>
+</footer>
+</body>
+</html>
